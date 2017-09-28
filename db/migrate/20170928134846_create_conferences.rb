@@ -7,6 +7,7 @@ class CreateConferences < ActiveRecord::Migration[5.1]
       t.string :image_uri, null: true
       t.date :start_date, null: false
       t.date :end_date, null: false
+      t.text :address, null: false
       t.integer :location_id, limit: 8, foreign_key: true, null: false
       t.integer :organizer_id, limit: 8, foreign_key: true, null: false
 

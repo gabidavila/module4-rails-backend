@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20170928135130) do
     t.string "image_uri"
     t.date "start_date", null: false
     t.date "end_date", null: false
+    t.text "address", null: false
     t.bigint "location_id", null: false
     t.bigint "organizer_id", null: false
     t.datetime "created_at", null: false
@@ -29,7 +30,6 @@ ActiveRecord::Schema.define(version: 20170928135130) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.text "address"
     t.string "city", null: false
     t.string "state", limit: 2, null: false
     t.datetime "created_at", null: false
