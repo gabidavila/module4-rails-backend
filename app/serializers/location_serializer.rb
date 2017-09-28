@@ -1,3 +1,3 @@
 class LocationSerializer < ActiveModel::Serializer
-  attributes :id, :city, :state, 
+  attributes :id, :city, :state 
 end
