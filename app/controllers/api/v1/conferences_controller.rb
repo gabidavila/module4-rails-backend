@@ -5,8 +5,8 @@ class Api::V1::ConferencesController < ApplicationController
     #   @conferences = Conference.all.order(:start_date)
     #   render json: @conferences, status: 200
     # else
-      @conferences = Conference.all.order(:start_date)
-      render json: @conferences, status: 200
+
+      render json: fetch, status: 200
     # end
 
   end
@@ -31,6 +31,15 @@ class Api::V1::ConferencesController < ApplicationController
   end
 
 private
+
+  def fetch
+    # binding.pry
+    @conferences = Conference.all.order(:start_date)
+    @conferences = @conferences.where(location_id: params[:city_id]).order(:start_date) if params[:city_id] != ""
+    @conferences = Conference.joins(:location).where("locations.state ILIKE ?", "%#{params[:state]}%").order(:start_date) if params[:state] && params[:city_id] == ""
+
+    @conferences
+  end
 
   def conference_params
     params.permit(:name, :description, :url, :image_uri, :start_date, :end_date, :location_id, :address, :organizer_id)
