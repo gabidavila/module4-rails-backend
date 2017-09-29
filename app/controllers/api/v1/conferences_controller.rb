@@ -1,8 +1,14 @@
 class Api::V1::ConferencesController < ApplicationController
 
   def index
-    @conferences = Conference.all.order(:start_date)
-    render json: @conferences, status: 200
+    # if params(:someparams)
+    #   @conferences = Conference.all.order(:start_date)
+    #   render json: @conferences, status: 200
+    # else
+      @conferences = Conference.all.order(:start_date)
+      render json: @conferences, status: 200
+    # end
+
   end
 
   def create
