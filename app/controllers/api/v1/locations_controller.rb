@@ -16,7 +16,6 @@ class Api::V1::LocationsController < ApplicationController
   # end
 
   def cities
-    binding.pry
     @cities = Location.where(state: params[:state]).order(:city)
     render json: @cities, status: 200
   end
