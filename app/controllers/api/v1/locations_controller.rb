@@ -10,15 +10,15 @@ class Api::V1::LocationsController < ApplicationController
     render json: @states.as_json, status: 200
   end
 
-  def cities
-    @cities = Location.group(:city).select(:city).pluck(:city)
-    render json: @cities.as_json, status: 200
-  end
+  # def cities
+  #   @cities = Location.group(:city).select(:city).pluck(:city)
+  #   render json: @cities.as_json, status: 200
+  # end
 
-  def cities_by_state
-    #state = params[:state]
-    #@cities = Location.where(state: state).group(:city).select(:city).pluck(:city)
-    #render json: @cities.as_json, status: 200
+  def cities
+    binding.pry
+    @cities = Location.where(state: params[:state]).order(:city)
+    render json: @cities, status: 200
   end
 
 end
