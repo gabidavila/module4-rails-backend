@@ -1,14 +1,8 @@
 class Api::V1::ConferencesController < ApplicationController
+  before_action :load_conference
 
   def index
-    # if params(:someparams)
-    #   @conferences = Conference.all.order(:start_date)
-    #   render json: @conferences, status: 200
-    # else
-
-      render json: fetch, status: 200
-    # end
-
+    render json: fetch, status: 200
   end
 
   def create
@@ -22,7 +16,6 @@ class Api::V1::ConferencesController < ApplicationController
   end
 
   def show
-    @conference = Conference.find_by(id: params[:id])
     render json: @conference, status: 200
   end
 
@@ -33,7 +26,6 @@ class Api::V1::ConferencesController < ApplicationController
 private
 
   def fetch
-    # binding.pry
     @conferences = Conference.all.order(:start_date)
     @conferences = @conferences.where(location_id: params[:city_id]).order(:start_date) if params[:city_id] != ""
     @conferences = Conference.joins(:location).where("locations.state ILIKE ?", "%#{params[:state]}%").order(:start_date) if params[:state] && params[:city_id] == ""
@@ -43,5 +35,9 @@ private
 
   def conference_params
     params.permit(:name, :description, :url, :image_uri, :start_date, :end_date, :location_id, :address, :organizer_id)
+  end
+
+  def load_conference
+    @conference = Conference.find_by(id: params[:id])
   end
 end
