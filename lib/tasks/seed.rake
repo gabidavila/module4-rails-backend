@@ -12,7 +12,6 @@ namespace :seed do
       start_date: DateTime.parse(event["start_date"]).strftime("%Y-%m-%d"),
       end_date: DateTime.parse(event["end_date"]).strftime("%Y-%m-%d"),
       address: event["location"],
-      location: Location.all.sample,
       organizer: User.first,
       talks: []
     }
@@ -48,9 +47,19 @@ namespace :seed do
 
   desc "Imports Conferences Data from Joindin"
   task conferences_joindin_data: :environment do
+    Rails.logger = Logger.new(STDOUT)
     response = fetch("/events?filter=upcoming")
     response["events"].collect do |event|
       new_event = Conference.new(build_event(event))
+
+      new_event.image_uri = event["images"]["orig"]["url"] if event["images"].length != 0
+      new_event.url = event["href"].nil? ? Faker::Internet.url : event["href"]
+      new_event.location = Location.all.sample
+
+      puts new_event.errors.inspect if !new_event.valid?
+
+      new_event.save
+
       talks_response = fetch(event["talks_uri"], true)
 
       new_event.talks = talks_response["talks"].collect do |talk|
@@ -63,15 +72,18 @@ namespace :seed do
         else
           new_speaker_build = create_speaker(Faker::Name.name)
         end
+
         new_speaker = User.find_or_initialize_by(name: new_speaker_build[:name])
         new_speaker.assign_attributes(new_speaker_build)
-
+        new_speaker.save
         new_talk.speaker = new_speaker
+        new_talk.conference = new_event
+
+        puts new_talk.errors.inspect if !new_talk.valid?
+        
+        new_talk.save
         new_talk
       end
-      
-      new_event.image_uri = event["images"]["orig"]["url"] if event["images"].length != 0
-      new_event.url = event["href"].nil? ? Faker::Internet.url : event["href"]
 
       new_event.save
     end
