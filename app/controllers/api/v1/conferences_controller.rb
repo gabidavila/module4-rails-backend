@@ -36,9 +36,9 @@ class Api::V1::ConferencesController < ApplicationController
   private
 
   def fetch
-    @conferences = Conference.all.order(:start_date)
-    @conferences = @conferences.where(location_id: params[:city_id]).order(:start_date) if params[:city_id] != "" && !params[:city_id].nil?
-    @conferences = Conference.joins(:location).where("locations.state ILIKE ?", "%#{params[:state]}%").order(:start_date) if params[:state] && params[:city_id] == ""
+    @conferences = Conference.all.includes(:talks).order(:start_date)
+    @conferences = @conferences.includes(:talks).where(location_id: params[:city_id]).order(:start_date) if params[:city_id] != "" && !params[:city_id].nil?
+    @conferences = Conference.joins(:location).includes(:talks).where("locations.state ILIKE ?", "%#{params[:state]}%").order(:start_date) if params[:state] && params[:city_id] == ""
 
     @conferences
   end
