@@ -49,13 +49,14 @@ namespace :seed do
   task conferences_joindin_data: :environment do
     Rails.logger = Logger.new(STDOUT)
     response = fetch("/events?filter=upcoming")
+    organizer = User.create(name: "Admin", email: "admin@admin.io", bio: "Conference Admin")
     response["events"].collect do |event|
       new_event = Conference.new(build_event(event))
 
       new_event.image_uri = event["images"]["orig"]["url"] if event["images"].length != 0
       new_event.url = event["href"].nil? ? Faker::Internet.url : event["href"]
       new_event.location = Location.all.sample
-
+      new_event.organizer = organizer
       puts new_event.errors.inspect if !new_event.valid?
 
       new_event.save
@@ -80,7 +81,7 @@ namespace :seed do
         new_talk.conference = new_event
 
         puts new_talk.errors.inspect if !new_talk.valid?
-        
+
         new_talk.save
         new_talk
       end
