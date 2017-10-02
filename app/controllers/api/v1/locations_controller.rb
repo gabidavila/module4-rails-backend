@@ -6,7 +6,7 @@ class Api::V1::LocationsController < ApplicationController
   end
 
   def states
-    @states = Location.group(:state).select(:state).pluck(:state)
+    @states = Location.group(:state).order(:state).select(:state).pluck(:state)
     render json: @states.as_json, status: 200
   end
 
