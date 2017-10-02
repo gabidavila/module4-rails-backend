@@ -1,7 +1,7 @@
 class Api::V1::TalksController < ApplicationController
 
   def index
-    @talks = Talk.all.order(:title)
+    @talks = Talk.where(conference_id: params[:conference_id]).order(:title)
     render json: @talks, status: 200
   end
 
@@ -19,6 +19,11 @@ class Api::V1::TalksController < ApplicationController
   def show
     @talk = Talk.find_by(id: params[:id])
     render json: @talk, status: 200
+  end
+
+  def show_all
+    @talks = Talk.order(:title)
+    render json: @talks, status: 200
   end
 
   def update

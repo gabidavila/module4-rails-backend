@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :locations, only: [:index]
       get "locations/states", to: "locations#states"
       get "locations/states/:state/cities", to: "locations#cities"
+      get "talks", to: "talks#show_all"
       resources :users, only: [:create, :update, :show]
         resources :conferences, only: [:index, :show, :create, :update] do
           resources :talks, only: [:index, :show, :create, :update]
