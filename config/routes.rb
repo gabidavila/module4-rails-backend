@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get "talks", to: "talks#show_all"
       resources :users, only: [:create, :update, :show]
       get "conferences/states", to: "conferences#states"
+      get "conferences/states/:state/cities", to: "conferences#cities"
       resources :conferences, only: [:index, :show, :create, :update] do
         resources :talks, only: [:index, :show, :create, :update]
       end

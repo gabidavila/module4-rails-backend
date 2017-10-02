@@ -28,6 +28,11 @@ class Api::V1::ConferencesController < ApplicationController
     render json: states.sort, status: 200
   end
 
+  def cities
+    cities = Location.joins(:conferences).where(state: params[:state])
+    render json: cities, status: 200
+  end
+
   private
 
   def fetch
