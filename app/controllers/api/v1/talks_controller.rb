@@ -31,8 +31,8 @@ class Api::V1::TalksController < ApplicationController
   end
 
   def topics
-    @topics = Talk.group(:topic).select('topic')
-    render json: @topics, status: 200
+    @topics = Talk.group(:topic).select('topic').pluck(:topic)
+    render json: @topics.as_json, status: 200
   end
 
 private
