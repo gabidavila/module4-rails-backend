@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get "locations/states/:state/cities", to: "locations#cities"
       get "talks", to: "talks#show_all"
       get "talks/topics", to: "talks#topics"
+      get "talks/:id", to: "talks#show"
       resources :users, only: [:create, :update, :show]
       get "conferences/states", to: "conferences#states"
       get "conferences/states/:state/cities", to: "conferences#cities"

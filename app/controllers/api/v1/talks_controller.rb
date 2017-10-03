@@ -23,11 +23,8 @@ class Api::V1::TalksController < ApplicationController
 
   def show_all
     @talks = Talk.order(:title)
+    @talks = Talk.where(topic: params[:topic]).order(:title) if params[:topic] != "" && !params[:topic].nil?
     render json: @talks, status: 200
-  end
-
-  def update
-
   end
 
   def topics
