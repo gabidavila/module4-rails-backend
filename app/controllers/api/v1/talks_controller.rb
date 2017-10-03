@@ -30,6 +30,11 @@ class Api::V1::TalksController < ApplicationController
 
   end
 
+  def topics
+    @topics = Talk.select(:topic).group(:topic)
+    render json: @topics, status: 200
+  end
+
 private
 
   def talk_params
